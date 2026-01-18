@@ -1,5 +1,5 @@
 CXX=g++
-CXXFLAGS=-std=c++11 -Wall
+CXXFLAGS=-std=c++11 -Wall -I./src
 LIBS=-lsqlite3
 
 TARGET=studentdb
