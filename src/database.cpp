@@ -1,10 +1,13 @@
 #include "database.h"
 #include <iostream>
 
-Database::Database(const std::string& filename) : db(nullptr), filename(filename) {
-    int rc = sqlite3_open(filename.c_str(), &db);
+Database::Database(const std::string& filename) : db(nullptr), filename(filename)//database constructor
+
+{
+    int rc = sqlite3_open(filename.c_str(), &db);//connect sqlite file
     
-    if (rc != SQLITE_OK) {
+    if (rc != SQLITE_OK) 
+    {
         std::cerr << "Error: Cannot open database '" << filename << "': " 
                   << sqlite3_errmsg(db) << std::endl;
         return;
@@ -12,12 +15,14 @@ Database::Database(const std::string& filename) : db(nullptr), filename(filename
     
     std::cout << "Database opened successfully: " << filename << std::endl;
     
-    if (!initStudentTable()) {
+    if (!initStudentTable()) //init and judge 
+    {
         std::cerr << "Error: Failed to initialize student table!" << std::endl;
     }
 }
 
-Database::~Database() {
+Database::~Database() //close connection
+{
     if (db != nullptr) {
         sqlite3_close(db);
         db = nullptr;
@@ -25,14 +30,15 @@ Database::~Database() {
     }
 }
 
-bool Database::execute(const std::string& sql) {
+bool Database::execute(const std::string& sql) //realize the operation
+{
     if (db == nullptr) {
         std::cerr << "Error: Database not opened!" << std::endl;
         return false;
     }
     
     char* errMsg = nullptr;
-    int rc = sqlite3_exec(db, sql.c_str(), nullptr, nullptr, &errMsg);
+    int rc = sqlite3_exec(db, sql.c_str(), nullptr, nullptr, &errMsg);//use exec function to realize the SQL operation
     
     if (rc != SQLITE_OK) {
         std::cerr << "SQL Error: " << errMsg << std::endl;
@@ -44,7 +50,8 @@ bool Database::execute(const std::string& sql) {
     return true;
 }
 
-bool Database::initStudentTable() {
+bool Database::initStudentTable() 
+{
     std::string createTableSQL = 
         "CREATE TABLE IF NOT EXISTS student ("
         "id INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -56,15 +63,17 @@ bool Database::initStudentTable() {
     return execute(createTableSQL);
 }
 
-// 获取错误信息
-std::string Database::getError() const {
+
+std::string Database::getError() const // get error information
+{
     if (db == nullptr) {
         return "Database not opened";
     }
     return sqlite3_errmsg(db);
 }
 
-// 检查数据库是否打开
-bool Database::isOpen() const {
+
+bool Database::isOpen() const // Check if the database is open.
+{
     return db != nullptr;
 }

@@ -7,7 +7,8 @@ using namespace std;
 
 Database* db = nullptr;
 
-void showMenu() {
+void showMenu() //print Menu choice
+{
     cout << "\n===== Student DB =====" << endl;
     cout << "1. Add student" << endl;
     cout << "2. Delete student" << endl;
@@ -27,7 +28,7 @@ void addStudent()
     double score;
     
     cout << "Enter student name: ";
-    cin.ignore();  
+    cin.ignore();  //clear buffer zone
     getline(cin, name);
     
     cout << "Enter student age: ";
@@ -37,7 +38,7 @@ void addStudent()
     cin >> score;
     
     string sql = "INSERT INTO student (name, age, score) VALUES ('" + 
-                 name + "', " + to_string(age) + ", " + to_string(score) + ");";
+                 name + "', " + to_string(age) + ", " + to_string(score) + ");"; //Splice into an SQL command
     
     if (db->execute(sql)) 
     {
@@ -63,7 +64,7 @@ void deleteStudent()
     
     if (confirm == 'y' || confirm == 'Y') 
     {
-        string sql = "DELETE FROM student WHERE id = " + to_string(id) + ";";
+        string sql = "DELETE FROM student WHERE id = " + to_string(id) + ";"; //Splice into an SQL command
         
         if (db->execute(sql)) 
         {
@@ -105,7 +106,7 @@ void updateStudent()
     string sql = "UPDATE student SET name = '" + name + 
                  "', age = " + to_string(age) + 
                  ", score = " + to_string(score) + 
-                 " WHERE id = " + to_string(id) + ";";
+                 " WHERE id = " + to_string(id) + ";"; //Splice into an SQL command
     
     if (db->execute(sql)) 
     {
@@ -126,7 +127,7 @@ void listStudents()
         return;
     }
     
-    const char* sql = "SELECT * FROM student ORDER BY id;";
+    const char* sql = "SELECT * FROM student ORDER BY id;"; //check SQL database
     sqlite3_stmt* stmt;
     
     if (sqlite3_prepare_v2(sqlite_db, sql, -1, &stmt, nullptr) != SQLITE_OK) 
@@ -152,7 +153,7 @@ void listStudents()
 
 int main()
 {
-    db = new Database("data/student.db");
+    db = new Database("data/student.db"); //Instantiation statement for creating a database connection object
     if (!db->isOpen()) {
         cout << "Failed to open database! Exiting..." << endl;
         delete db;
